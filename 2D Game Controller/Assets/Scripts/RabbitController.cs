@@ -16,6 +16,7 @@ public class RabbitController : MonoBehaviour {
     public Transform groundCheck;
     float groundRadius = 0.2f;
     public LayerMask whatIsGround;
+    public float jumpForce = 700f;
 
 	// Use this for initialization
 	void Start () 
@@ -29,6 +30,8 @@ public class RabbitController : MonoBehaviour {
         grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
         anim.SetBool("Ground", grounded);
 
+        anim.SetFloat("vSpeed", rigidbody2D.velocity.y);
+
 
         float move = Input.GetAxis("Horizontal");
 
@@ -41,6 +44,15 @@ public class RabbitController : MonoBehaviour {
         else if (move < 0 && facingRight)
             Flip();
 	}
+
+    void Update()
+    {
+        if(grounded && Input.GetKeyDown(KeyCode.Space))
+        {
+            anim.SetBool("Ground", false);
+            rigidbody2D.AddForce(new Vector2(0, jumpForce));
+        }
+    }
 
     void Flip()
     {
